@@ -21,4 +21,16 @@ enum ApplicationStatus: string
             self::Rejected => 'Afgewezen',
         };
     }
+
+    /** Tailwind-klassen voor het gekleurde label. */
+    public function badgeClasses(): string
+    {
+        return match ($this) {
+            self::ToSend => 'bg-stone-100 text-stone-700 ring-stone-300',
+            self::Sent => 'bg-sky-50 text-sky-800 ring-sky-200',
+            self::Interview => 'bg-amber-50 text-amber-800 ring-amber-200',
+            self::Accepted => 'bg-emerald-50 text-emerald-800 ring-emerald-200',
+            self::Rejected => 'bg-rose-50 text-rose-800 ring-rose-200',
+        };
+    }
 }

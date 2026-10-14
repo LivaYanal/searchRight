@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable([
     'name', 'city', 'website', 'stagemarkt_url', 'focus', 'description',
@@ -30,6 +31,12 @@ class Company extends Model
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class);
+    }
+
+    /** De meest recente sollicitatie (voor de status in het overzicht). */
+    public function latestApplication(): HasOne
+    {
+        return $this->hasOne(Application::class)->latestOfMany();
     }
 
     /** Programmeertalen/frameworks die het bedrijf gebruikt. */

@@ -7,10 +7,15 @@ use App\Models\User;
 
 /**
  * Bepaalt wie wat mag met een bedrijf.
- * Je mag alleen je eigen bedrijven bewerken en verwijderen.
+ * Je mag alleen je eigen bedrijven bekijken, bewerken en verwijderen.
  */
 class CompanyPolicy
 {
+    public function view(User $user, Company $company): bool
+    {
+        return $user->id === $company->user_id;
+    }
+
     public function update(User $user, Company $company): bool
     {
         return $user->id === $company->user_id;

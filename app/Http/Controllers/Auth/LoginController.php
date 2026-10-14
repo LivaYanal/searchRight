@@ -32,7 +32,7 @@ class LoginController extends Controller
         // Nieuwe sessie-ID tegen "session fixation"-aanvallen
         $request->session()->regenerate();
 
-        return redirect()->intended(route('companies.index'));
+        return redirect()->intended(route('board'));
     }
 
     public function destroy(Request $request): RedirectResponse

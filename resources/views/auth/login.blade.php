@@ -1,23 +1,21 @@
-<x-layout title="Inloggen">
-    <div class="mx-auto max-w-sm">
-        <h1 class="text-2xl font-semibold tracking-tight">Inloggen</h1>
-        <p class="mt-1 text-sm text-stone-600">Houd je stagezoektocht bij op één plek.</p>
+<x-auth-layout title="Inloggen">
+    <h1 class="font-display text-[32px] font-extrabold">Welkom terug 👋</h1>
+    <p class="mt-1 text-sm text-ink-muted">Log in om verder te gaan met je zoektocht.</p>
 
-        <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-4 rounded-xl border border-stone-200 bg-white p-6">
-            @csrf
-            <x-field name="email" label="E-mailadres" type="email" required autofocus autocomplete="email" />
-            <x-field name="password" label="Wachtwoord" type="password" required autocomplete="current-password" />
+    <form method="POST" action="{{ route('login') }}" class="mt-6 flex flex-col gap-4.5">
+        @csrf
+        <x-field name="email" label="E-mailadres" type="email" required autofocus autocomplete="email" />
+        <x-field name="password" label="Wachtwoord" type="password" required autocomplete="current-password" />
 
-            <label class="flex items-center gap-2 text-sm text-stone-600">
-                <input type="checkbox" name="remember" class="rounded border-stone-300 accent-teal-700">
-                Ingelogd blijven
-            </label>
+        <label class="flex items-center gap-2 text-[13px] text-ink-muted">
+            <input type="checkbox" name="remember" class="size-4 rounded accent-accent">
+            Ingelogd blijven
+        </label>
 
-            <x-button class="w-full">Inloggen</x-button>
-        </form>
+        <x-button class="w-full">Inloggen</x-button>
+    </form>
 
-        <p class="mt-4 text-center text-sm text-stone-600">
-            Nog geen account? <a href="{{ route('register') }}" class="font-medium text-teal-800 hover:underline">Registreren</a>
-        </p>
-    </div>
-</x-layout>
+    <p class="mt-4 text-[13px] text-ink-muted">
+        Nog geen account? <a href="{{ route('register') }}" class="font-semibold text-accent hover:underline">Registreren</a>
+    </p>
+</x-auth-layout>

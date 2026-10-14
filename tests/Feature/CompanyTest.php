@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\ApplicationStatus;
 use App\Models\Company;
 use App\Models\Technology;
 use App\Models\User;
@@ -41,13 +42,41 @@ class CompanyTest extends TestCase
             'website' => 'www.pixelgames.nl',
             'technologies' => [$php->id],
             'new_technologies' => 'Unity, C#',
-        ])->assertRedirect(route('companies.index'));
+        ])->assertRedirect(route('board'));
 
         $company = $user->companies()->first();
 
         $this->assertSame('Pixel Games', $company->name);
         $this->assertSame('https://www.pixelgames.nl', $company->website);
         $this->assertSame('C#, PHP, Unity', $company->technology_list);
+        $this->assertSame('PG', $company->initials);
+
+        // Een nieuw bedrijf begint in de kolom "Te versturen"
+        $this->assertSame(ApplicationStatus::ToSend, $company->fresh()->currentStatus());
+    }
+
+    public function test_a_custom_focus_overrides_the_chosen_option(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post('/companies', [
+            'name' => 'Veilig BV',
+            'focus' => 'Webdevelopment',
+            'focus_other' => 'Cybersecurity',
+        ]);
+
+        $this->assertSame('Cybersecurity', $user->companies()->first()->focus);
+    }
+
+    public function test_the_detail_page_shows_the_company(): void
+    {
+        $user = User::factory()->create();
+        $company = Company::factory()->for($user)->create(['name' => 'Bitbaai']);
+
+        $this->actingAs($user)->get("/companies/{$company->id}")
+            ->assertOk()
+            ->assertSee('Bitbaai')
+            ->assertSee('Status van je sollicitatie');
     }
 
     public function test_technology_list_shows_a_dash_when_empty(): void
@@ -71,7 +100,7 @@ class CompanyTest extends TestCase
 
         $this->actingAs($user)
             ->put("/companies/{$company->id}", ['name' => 'Nieuwe Naam'])
-            ->assertRedirect(route('companies.index'));
+            ->assertRedirect(route('companies.show', $company));
 
         $this->assertSame('Nieuwe Naam', $company->fresh()->name);
     }
@@ -81,6 +110,7 @@ class CompanyTest extends TestCase
         $company = Company::factory()->create();
         $intruder = User::factory()->create();
 
+        $this->actingAs($intruder)->get("/companies/{$company->id}")->assertForbidden();
         $this->actingAs($intruder)->get("/companies/{$company->id}/edit")->assertForbidden();
         $this->actingAs($intruder)->put("/companies/{$company->id}", ['name' => 'Gehackt'])->assertForbidden();
         $this->actingAs($intruder)->delete("/companies/{$company->id}")->assertForbidden();

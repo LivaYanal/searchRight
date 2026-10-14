@@ -12,7 +12,7 @@ use Illuminate\View\View;
 
 class CompanyController extends Controller
 {
-    /** Overzicht van jouw bedrijven, met zoeken en filteren op taal. */
+    /** Lijst van jouw bedrijven, met zoeken en filteren op taal. */
     public function index(Request $request): View
     {
         $search = $request->string('q')->trim()->toString();
@@ -51,14 +51,28 @@ class CompanyController extends Controller
 
     public function store(CompanyRequest $request): RedirectResponse
     {
-        $company = $request->user()->companies()->create(
-            $request->safe()->except(['technologies', 'new_technologies'])
-        );
+        $company = $request->user()->companies()->create($request->companyData());
 
         $this->syncTechnologies($company, $request);
 
-        return redirect()->route('companies.index')
-            ->with('status', "{$company->name} is toegevoegd.");
+        // Elk nieuw bedrijf begint in de kolom "Te versturen"
+        $company->applications()->create();
+
+        return redirect()->route('board')
+            ->with('status', "{$company->name} staat nu op je bord.");
+    }
+
+    /** Detailpagina: status, datums, notities, contactpersoon. */
+    public function show(Company $company): View
+    {
+        Gate::authorize('view', $company);
+
+        $company->load(['technologies', 'latestApplication']);
+
+        return view('companies.show', [
+            'company' => $company,
+            'application' => $company->currentApplication(),
+        ]);
     }
 
     public function edit(Company $company): View
@@ -75,11 +89,11 @@ class CompanyController extends Controller
     {
         Gate::authorize('update', $company);
 
-        $company->update($request->safe()->except(['technologies', 'new_technologies']));
+        $company->update($request->companyData());
 
         $this->syncTechnologies($company, $request);
 
-        return redirect()->route('companies.index')
+        return redirect()->route('companies.show', $company)
             ->with('status', "{$company->name} is bijgewerkt.");
     }
 

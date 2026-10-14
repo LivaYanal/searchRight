@@ -5,7 +5,9 @@
 return [
     'array' => ':Attribute moet een lijst zijn.',
     'confirmed' => ':Attribute komt niet overeen met de bevestiging.',
+    'date' => ':Attribute moet een geldige datum zijn.',
     'email' => ':Attribute moet een geldig e-mailadres zijn.',
+    'enum' => 'De gekozen :attribute is ongeldig.',
     'exists' => 'De gekozen :attribute bestaat niet.',
     'integer' => ':Attribute moet een getal zijn.',
     'lowercase' => ':Attribute mag alleen kleine letters bevatten.',
@@ -34,5 +36,10 @@ return [
         'contact_phone' => 'telefoon contactpersoon',
         'technologies' => 'talen',
         'new_technologies' => 'andere talen',
+        'focus_other' => 'andere focus',
+        'status' => 'status',
+        'sent_at' => 'verstuurdatum',
+        'follow_up_at' => 'opvolgdatum',
+        'notes' => 'notities',
     ],
 ];

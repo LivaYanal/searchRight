@@ -31,7 +31,7 @@ class RegisterController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('companies.index')
+        return redirect()->route('board')
             ->with('status', 'Welkom bij searchRight, '.$user->name.'!');
     }
 }

@@ -13,7 +13,12 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh && chmod +x /usr/local/bin/entrypoint.sh
 
+# Alleen voor lokale ontwikkeling: PHP-FPM draait als root, net als artisan.
+# Op Windows-mappen mag www-data anders geen bestandsdatums aanpassen
+# ("touch(): Utime failed: Operation not permitted").
+RUN sed -i 's/^user = www-data/user = root/; s/^group = www-data/group = root/' /usr/local/etc/php-fpm.d/www.conf
+
 WORKDIR /var/www/html
 
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["php-fpm"]
+CMD ["php-fpm", "-R"]

@@ -1,54 +1,78 @@
+@use('App\Http\Requests\CompanyRequest')
+
 @csrf
 
-<section class="rounded-xl border border-stone-200 bg-white p-6">
-    <h2 class="font-semibold">Bedrijf</h2>
-    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-        <x-field name="name" label="Naam *" :value="$company->name" required class="sm:col-span-2" />
-        <x-field name="city" label="Plaats" :value="$company->city" />
-        <x-field name="focus" label="Focus" :value="$company->focus" list="focus-options"
-                 hint="Bijv. Webdevelopment of Gaming" />
-        <datalist id="focus-options">
-            @foreach (['Webdevelopment', 'Gaming', 'Apps', 'Software op maat', 'E-commerce', 'Data & AI'] as $option)
-                <option value="{{ $option }}">
-            @endforeach
-        </datalist>
-        <x-field name="description" label="Korte omschrijving" :value="$company->description" maxlength="255"
-                 hint="Eén zin uit hun bio, zodat je weet wat ze doen." class="sm:col-span-2" />
-        <x-field name="website" label="Website" :value="$company->website" placeholder="www.bedrijf.nl" />
-        <x-field name="stagemarkt_url" label="Link op stagemarkt.nl" :value="$company->stagemarkt_url" />
+@php
+    $currentFocus = old('focus', $company->focus);
+    $isCustomFocus = $currentFocus && ! in_array($currentFocus, CompanyRequest::FOCUS_OPTIONS, true);
+    $selected = collect(old('technologies', $company->technologies->pluck('id')->all()))->map(fn ($id) => (int) $id);
+@endphp
+
+<div class="grid gap-4 sm:grid-cols-2">
+    <x-field name="name" label="Naam *" :value="$company->name" required />
+    <x-field name="city" label="Plaats" :value="$company->city" placeholder="Amsterdam" />
+</div>
+
+{{-- Focus als knopjes --}}
+<fieldset>
+    <legend class="mb-2 text-[13px] font-medium">Focus</legend>
+    <input type="hidden" name="focus" value="">
+    <div class="flex flex-wrap gap-2">
+        @foreach (CompanyRequest::FOCUS_OPTIONS as $option)
+            <label class="cursor-pointer">
+                <input type="radio" name="focus" value="{{ $option }}" class="peer sr-only" @checked($currentFocus === $option)>
+                <span class="inline-block rounded-full border border-line bg-surface px-3 py-1.5 text-[13px] font-medium text-ink-muted transition peer-checked:border-ink peer-checked:bg-ink peer-checked:font-semibold peer-checked:text-lime peer-focus-visible:ring-2 peer-focus-visible:ring-accent/40">
+                    {{ $option }}
+                </span>
+            </label>
+        @endforeach
     </div>
-</section>
+    <x-field name="focus_other" label="Of typ zelf een focus" class="mt-3" :value="$isCustomFocus ? $currentFocus : null" placeholder="bijv. Cybersecurity" />
+</fieldset>
 
-<section class="rounded-xl border border-stone-200 bg-white p-6">
-    <h2 class="font-semibold">Programmeertalen</h2>
-    <p class="mt-1 text-sm text-stone-600">Vink aan wat in hun bio of vacature staat. Staat er niets? Laat leeg, dan zie je "-".</p>
+{{-- Korte omschrijving met teller --}}
+<div>
+    <div class="mb-1.5 flex items-center justify-between">
+        <label for="description" class="text-[13px] font-medium">Korte omschrijving</label>
+        <span id="description-counter" class="font-mono text-[11px] text-ink-soft"></span>
+    </div>
+    <input id="description" name="description" maxlength="255" data-counter="description-counter"
+           value="{{ old('description', $company->description) }}" placeholder="Wat doet het bedrijf, in één zin?"
+           class="w-full rounded-[10px] border border-line bg-surface px-3 py-2.5 text-sm outline-none placeholder:text-ink-soft focus:border-accent focus:ring-2 focus:ring-accent/20">
+    <p class="mt-1 text-xs text-ink-soft">Eén zin uit hun bio, zodat je weet wat ze doen.</p>
+    @error('description') <p class="mt-1 text-xs font-medium text-st-rejected">{{ $message }}</p> @enderror
+</div>
 
-    @php
-        $selected = collect(old('technologies', $company->technologies->pluck('id')->all()))
-            ->map(fn ($id) => (int) $id);
-    @endphp
-
-    <div class="mt-4 flex flex-wrap gap-2">
+{{-- Talen als aanklikbare chips --}}
+<fieldset>
+    <legend class="mb-2 flex w-full items-center justify-between text-[13px] font-medium">
+        Programmeertalen <span class="font-mono text-[11px] font-normal text-ink-soft">geen? dan "-"</span>
+    </legend>
+    <div class="flex flex-wrap gap-1.5">
         @foreach ($technologies as $technology)
             <label class="cursor-pointer">
                 <input type="checkbox" name="technologies[]" value="{{ $technology->id }}" class="peer sr-only"
                        @checked($selected->contains($technology->id))>
-                <span class="inline-block rounded-md border border-stone-300 px-2.5 py-1 font-mono text-xs text-stone-700 transition peer-checked:border-teal-700 peer-checked:bg-teal-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-teal-600/40">
+                <span class="inline-block rounded-md border border-line bg-paper px-2.5 py-1 font-mono text-xs text-ink-muted transition peer-checked:border-accent peer-checked:bg-accent peer-checked:text-surface peer-focus-visible:ring-2 peer-focus-visible:ring-accent/40">
                     {{ $technology->name }}
                 </span>
             </label>
         @endforeach
     </div>
+    <x-field name="new_technologies" label="Andere talen" class="mt-3" placeholder="bijv. Rust, Flutter"
+             hint="Staat een taal er niet bij? Typ ze hier, gescheiden door komma's." />
+</fieldset>
 
-    <x-field name="new_technologies" label="Andere talen" class="mt-4"
-             hint="Staat een taal er niet bij? Typ ze hier, gescheiden door komma's (bijv. Rust, Flutter)." />
-</section>
+<div class="grid gap-4 sm:grid-cols-2">
+    <x-field name="website" label="Website" :value="$company->website" placeholder="www.bedrijf.nl" />
+    <x-field name="stagemarkt_url" label="Link op stagemarkt.nl" :value="$company->stagemarkt_url" placeholder="stagemarkt.nl/…" />
+</div>
 
-<section class="rounded-xl border border-stone-200 bg-white p-6">
-    <h2 class="font-semibold">Contactpersoon</h2>
-    <div class="mt-4 grid gap-4 sm:grid-cols-3">
+<details class="group rounded-[10px] border border-line px-4 py-3" @if ($company->contact_name || $errors->hasAny(['contact_name', 'contact_email', 'contact_phone'])) open @endif>
+    <summary class="cursor-pointer text-[13px] font-semibold">Contactpersoon <span class="font-normal text-ink-soft">(optioneel)</span></summary>
+    <div class="mt-3 grid gap-4 sm:grid-cols-3">
         <x-field name="contact_name" label="Naam" :value="$company->contact_name" />
         <x-field name="contact_email" label="E-mail" type="email" :value="$company->contact_email" />
         <x-field name="contact_phone" label="Telefoon" type="tel" :value="$company->contact_phone" />
     </div>
-</section>
+</details>

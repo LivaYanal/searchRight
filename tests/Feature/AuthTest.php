@@ -25,7 +25,7 @@ class AuthTest extends TestCase
             'password_confirmation' => 'geheim-wachtwoord',
         ]);
 
-        $response->assertRedirect(route('companies.index'));
+        $response->assertRedirect(route('board'));
         $this->assertAuthenticated();
         $this->assertDatabaseHas('users', ['email' => 'livanur@example.com']);
     }
@@ -35,7 +35,7 @@ class AuthTest extends TestCase
         $user = User::factory()->create();
 
         $this->post('/login', ['email' => $user->email, 'password' => 'password'])
-            ->assertRedirect(route('companies.index'));
+            ->assertRedirect(route('board'));
 
         $this->assertAuthenticatedAs($user);
     }

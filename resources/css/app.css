@@ -3,7 +3,42 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+/* Design-tokens uit het Figma-ontwerp (searchRight – App ontwerp) */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Bricolage Grotesque', 'Instrument Sans', ui-sans-serif, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --color-ink: #15131f;
+    --color-ink-muted: #5a5668;
+    --color-ink-soft: #9a96a8;
+    --color-line: #e7e3da;
+    --color-paper: #f7f4ee;
+    --color-surface: #ffffff;
+    --color-accent: #5b3df5;
+    --color-accent-soft: #ece8ff;
+    --color-lime: #d4ff4f;
+
+    --color-st-to-send: #64748b;
+    --color-st-to-send-soft: #eef1f5;
+    --color-st-sent: #2563eb;
+    --color-st-sent-soft: #e6eeff;
+    --color-st-interview: #c26a00;
+    --color-st-interview-soft: #fff0d6;
+    --color-st-accepted: #15803d;
+    --color-st-accepted-soft: #e1f5e7;
+    --color-st-rejected: #e11d48;
+    --color-st-rejected-soft: #fde6eb;
+}
+
+/* Kanban: slepen en neerzetten */
+[data-card].is-dragging {
+    opacity: 0.35;
+}
+
+[data-column].is-over [data-list] {
+    outline: 2px dashed var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--color-accent-soft) 60%, transparent);
 }

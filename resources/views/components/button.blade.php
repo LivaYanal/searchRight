@@ -1,11 +1,12 @@
 @props(['variant' => 'primary', 'href' => null])
 
 @php
-    $classes = 'inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600/40 '
+    $classes = 'inline-flex items-center justify-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 '
         .match ($variant) {
-            'primary' => 'bg-teal-700 text-white hover:bg-teal-800',
-            'secondary' => 'border border-stone-300 bg-white text-stone-700 hover:bg-stone-100',
-            'danger' => 'border border-rose-200 bg-white text-rose-700 hover:bg-rose-50',
+            'primary' => 'bg-accent text-surface hover:bg-[#4a2ee0]',
+            'secondary' => 'border border-line bg-surface text-ink hover:bg-paper',
+            'dark' => 'bg-ink text-lime hover:bg-black',
+            'danger' => 'border border-st-rejected/30 bg-surface text-st-rejected hover:bg-st-rejected-soft',
         };
 @endphp
 

@@ -1,0 +1,47 @@
+# Render Blueprint: maakt de webservice en de database in één keer aan.
+# Render-dashboard → New → Blueprint → kies deze repository.
+services:
+  - type: web
+    name: searchright
+    runtime: docker
+    plan: free
+    dockerfilePath: ./docker/render/Dockerfile
+    dockerContext: .
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: searchRight
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false # zelf invullen: php artisan key:generate --show
+      - key: APP_LOCALE
+        value: nl
+      - key: APP_FALLBACK_LOCALE
+        value: en
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_URL
+        fromDatabase:
+          name: searchright-db
+          property: connectionString
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: INTERNSHIP_START
+        value: "2027-01-25"
+      - key: SEARCHRIGHT_DEMO
+        value: "true"
+
+databases:
+  - name: searchright-db
+    plan: free
+    databaseName: searchright
+    user: searchright

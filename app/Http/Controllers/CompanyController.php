@@ -22,9 +22,10 @@ class CompanyController extends Controller
             ->with(['technologies', 'latestApplication'])
             ->when($search, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
-                    $query->where('name', 'like', "%{$search}%")
-                        ->orWhere('city', 'like', "%{$search}%")
-                        ->orWhere('focus', 'like', "%{$search}%");
+                    // whereLike negeert hoofdletters, ook in PostgreSQL (online)
+                    $query->whereLike('name', "%{$search}%")
+                        ->orWhereLike('city', "%{$search}%")
+                        ->orWhereLike('focus', "%{$search}%");
                 });
             })
             ->when($techId, function ($query, $techId) {

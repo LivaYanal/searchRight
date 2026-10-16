@@ -3,6 +3,8 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 /* Design-tokens uit het Figma-ontwerp (searchRight – App ontwerp) */
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
@@ -29,6 +31,116 @@
     --color-st-accepted-soft: #e1f5e7;
     --color-st-rejected: #e11d48;
     --color-st-rejected-soft: #fde6eb;
+}
+
+/* Donkere modus: dezelfde namen, andere waarden */
+[data-theme='dark'] {
+    color-scheme: dark;
+
+    --color-ink: #ecebf3;
+    --color-ink-muted: #aba6b9;
+    --color-ink-soft: #7c778b;
+    --color-line: #2a2735;
+    --color-paper: #0e0d14;
+    --color-surface: #18161f;
+    --color-accent: #8b74ff;
+    --color-accent-soft: #251e4d;
+
+    --color-st-to-send: #a3b0c2;
+    --color-st-to-send-soft: #222731;
+    --color-st-sent: #7aa5ff;
+    --color-st-sent-soft: #172446;
+    --color-st-interview: #f2a94a;
+    --color-st-interview-soft: #3a2a12;
+    --color-st-accepted: #5ad68a;
+    --color-st-accepted-soft: #133222;
+    --color-st-rejected: #ff7a96;
+    --color-st-rejected-soft: #3d1622;
+}
+
+/* Blokken die altijd donker blijven (zijbalk, logo, donkere panelen) */
+.keep-dark {
+    --color-ink: #15131f;
+    --color-ink-muted: #5a5668;
+    --color-ink-soft: #9a96a8;
+    --color-line: #e7e3da;
+    --color-paper: #f7f4ee;
+    --color-surface: #ffffff;
+}
+
+[data-theme='dark'] .keep-dark {
+    --color-ink: #1c1a27;
+}
+
+[data-theme='dark'] .keep-dark.logo-mark {
+    --color-ink: #15131f;
+}
+
+/* Thema wisselen: cirkel die vanuit de knop groeit */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+    animation: theme-reveal 550ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes theme-reveal {
+    from {
+        clip-path: circle(0 at var(--theme-x, 50%) var(--theme-y, 50%));
+    }
+    to {
+        clip-path: circle(var(--theme-r, 150vmax) at var(--theme-x, 50%) var(--theme-y, 50%));
+    }
+}
+
+/* Zon/maan-icoon */
+.theme-toggle svg {
+    transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle .sun-core {
+    transition: r 400ms ease;
+}
+
+.theme-toggle .moon-cut {
+    transition: cx 400ms ease, cy 400ms ease;
+}
+
+.theme-toggle .sun-rays {
+    transform-origin: center;
+    transition: transform 400ms ease, opacity 300ms ease;
+}
+
+[data-theme='dark'] .theme-toggle svg {
+    transform: rotate(-40deg);
+}
+
+[data-theme='dark'] .theme-toggle .sun-core {
+    r: 9px;
+}
+
+[data-theme='dark'] .theme-toggle .moon-cut {
+    cx: 17px;
+    cy: 7px;
+}
+
+[data-theme='dark'] .theme-toggle .sun-rays {
+    opacity: 0;
+    transform: rotate(45deg) scale(0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-new(root) {
+        animation: none;
+    }
+
+    .theme-toggle *,
+    .theme-toggle svg {
+        transition: none;
+    }
 }
 
 /* Kanban: slepen en neerzetten */

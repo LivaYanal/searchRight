@@ -21,7 +21,7 @@
         @foreach (CompanyRequest::FOCUS_OPTIONS as $option)
             <label class="cursor-pointer">
                 <input type="radio" name="focus" value="{{ $option }}" class="peer sr-only" @checked($currentFocus === $option)>
-                <span class="inline-block rounded-full border border-line bg-surface px-3 py-1.5 text-[13px] font-medium text-ink-muted transition peer-checked:border-ink peer-checked:bg-ink peer-checked:font-semibold peer-checked:text-lime peer-focus-visible:ring-2 peer-focus-visible:ring-accent/40">
+                <span class="inline-block rounded-full border border-line bg-surface px-3 py-1.5 text-[13px] font-medium text-ink-muted transition peer-checked:border-ink peer-checked:bg-ink peer-checked:font-semibold peer-checked:text-lime dark:peer-checked:border-accent dark:peer-checked:bg-accent dark:peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-accent/40">
                     {{ $option }}
                 </span>
             </label>
@@ -53,7 +53,7 @@
             <label class="cursor-pointer">
                 <input type="checkbox" name="technologies[]" value="{{ $technology->id }}" class="peer sr-only"
                        @checked($selected->contains($technology->id))>
-                <span class="inline-block rounded-md border border-line bg-paper px-2.5 py-1 font-mono text-xs text-ink-muted transition peer-checked:border-accent peer-checked:bg-accent peer-checked:text-surface peer-focus-visible:ring-2 peer-focus-visible:ring-accent/40">
+                <span class="inline-block rounded-md border border-line bg-paper px-2.5 py-1 font-mono text-xs text-ink-muted transition peer-checked:border-accent peer-checked:bg-accent peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-accent/40">
                     {{ $technology->name }}
                 </span>
             </label>

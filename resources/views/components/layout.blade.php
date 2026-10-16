@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ? $title.' · ' : '' }}{{ config('app.name') }}</title>
+    <x-theme-script />
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -14,7 +15,7 @@
 <div class="flex min-h-screen">
 
     {{-- Zijbalk (vanaf laptopformaat) --}}
-    <aside class="sticky top-0 hidden h-screen w-62 shrink-0 flex-col gap-7 bg-ink px-5 pt-7 pb-6 lg:flex">
+    <aside class="keep-dark sticky top-0 hidden h-screen w-62 shrink-0 flex-col gap-7 bg-ink px-5 pt-7 pb-6 lg:flex">
         <a href="{{ route('board') }}" class="flex items-center gap-2.5">
             <x-logo-mark />
             <span class="font-display text-xl font-extrabold text-surface">searchRight</span>
@@ -46,12 +47,13 @@
                     <button class="text-xs text-ink-soft hover:text-lime">Uitloggen</button>
                 </form>
             </div>
+            <x-theme-toggle />
         </div>
     </aside>
 
     <div class="flex min-w-0 flex-1 flex-col">
         {{-- Bovenbalk op telefoon/tablet --}}
-        <header class="flex items-center justify-between gap-4 bg-ink px-4 py-3 lg:hidden">
+        <header class="keep-dark flex items-center justify-between gap-4 bg-ink px-4 py-3 lg:hidden">
             <a href="{{ route('board') }}" class="flex items-center gap-2">
                 <x-logo-mark />
                 <span class="font-display text-lg font-extrabold text-surface">searchRight</span>
@@ -60,6 +62,7 @@
                 <a href="{{ route('board') }}" class="{{ request()->routeIs('board') ? 'text-lime' : '' }}">Bord</a>
                 <a href="{{ route('companies.index') }}" class="{{ request()->routeIs('companies.*') ? 'text-lime' : '' }}">Bedrijven</a>
                 <span class="rounded-full bg-lime px-2 py-0.5 text-xs font-semibold text-ink">{{ $daysUntilInternship }} d</span>
+                <x-theme-toggle />
             </nav>
         </header>
 

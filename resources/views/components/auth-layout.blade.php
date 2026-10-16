@@ -6,12 +6,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ? $title.' · ' : '' }}{{ config('app.name') }}</title>
+    <x-theme-script />
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-full bg-paper font-sans text-ink antialiased">
 <div class="grid min-h-screen lg:grid-cols-[1fr_560px]">
-    <section class="flex flex-col gap-6 bg-ink px-8 py-10 sm:px-14 lg:py-12">
+    <section class="keep-dark flex flex-col gap-6 bg-ink px-8 py-10 sm:px-14 lg:py-12">
         <div class="flex items-center gap-2.5">
             <x-logo-mark size="lg" />
             <span class="font-display text-[22px] font-extrabold text-surface">searchRight</span>
@@ -35,7 +36,8 @@
         <p class="hidden font-mono text-xs text-ink-soft lg:block">Stage vanaf 25 januari · Software Developer niveau 4</p>
     </section>
 
-    <section class="flex items-center justify-center px-6 py-12">
+    <section class="relative flex items-center justify-center px-6 py-12">
+        <x-theme-toggle class="absolute top-5 right-5" />
         <div class="w-full max-w-sm">
             {{ $slot }}
         </div>

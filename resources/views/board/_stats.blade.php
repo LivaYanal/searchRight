@@ -16,7 +16,7 @@
             {{ $stats['nextInterview'] ? 'Volgende: '.$stats['nextInterview']->translatedFormat('D j M') : 'Nog geen gepland' }}
         </p>
     </div>
-    <div class="rounded-2xl bg-ink px-5 py-4.5">
+    <div class="keep-dark rounded-2xl bg-ink px-5 py-4.5">
         <p class="text-[13px] font-medium text-ink-soft">Opvolgen deze week</p>
         <p class="font-display text-4xl leading-10 font-extrabold text-lime">{{ $stats['followUps'] }}</p>
         <p class="text-xs text-ink-soft">{{ $stats['followUps'] ? 'Mail ze vandaag nog!' : 'Alles bijgewerkt ✓' }}</p>
